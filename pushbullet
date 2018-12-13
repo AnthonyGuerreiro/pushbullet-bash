@@ -487,7 +487,7 @@ push)
 	fi
 
 	# replace newlines with an escape sequence
-	body=$(printf '%s\n' "$body" | sed 's/\n/\\n/g')
+	body=$(printf '%s\n' "$body" | sed -E ':a;N;$!ba;s/\r{0,1}\n/\\n/g')
 
 	case $3 in
 	note)
