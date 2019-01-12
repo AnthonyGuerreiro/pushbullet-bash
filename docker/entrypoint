@@ -1,0 +1,24 @@
+#!/bin/sh
+
+if [ ! -f /.pb/.pushbullet.conf ]; then
+
+  if [ -z ${PB_API_KEY} ]; then
+    echo "PB_API_KEY is not set"
+    exit 1
+  fi
+
+  echo "API_KEY=${PB_API_KEY}" > /.pb/.pushbullet.conf
+  echo "Sending test notification"
+  push "Notification from Docker" "Hello!"
+  exitcode=$?
+  if [ $exitcode -ne 0 ]; then
+    echo "Could not send test notification, exit code: $exitcode"
+    exit $exitcode
+  fi
+fi
+
+if [ -f /service ]; then
+  /service "$@"
+elif [ $# -ne 0 ]; then
+  exec "$@"
+fi
